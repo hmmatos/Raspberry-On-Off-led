@@ -1,0 +1,9 @@
+{
+  "name": "ledClientServe",
+  "description": "on/off led - client server",
+  "author": "Hugo Matos",
+  "dependencies": {
+    "socket.io": "^0.9.16",
+    "pi-gpio": "0.0.5"
+  }
+}

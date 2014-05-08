@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>client</title>
+    </head>
+<body>
+    <hi>connect to node server</hi>
+    <script src="http://192.168.1.32:3000/socket.io/socket.io.js"></script>
+    <script>
+    var socket = io.connect('http://192.168.1.32:3000');
+        
+    var myId;
+        
+    socket.on('on connection', function (data) {
+        console.log("on connection: " + data.client);
+        console.log("Number of client connected: " + data.clientCount);
+    });
+
+    socket.on('on disconnect',function(data) {
+        console.log("on disconnect: " + data.client);
+        console.log("Number of client connected: " + data.clientCount);
+    });
+
+    socket.on('your id',function(data) {
+        console.log("your id: " + data.id);
+        myId = data.id;
+    });
+
+    socket.on('ack button status', function (data) {
+        console.log("status: " + data.status);
+    
+        if(myId==data.by){
+            console.log("by YOU");
+        }else{
+            console.log("by: " + data.by);
+        }
+    
+        if(data.status =='ON'){
+            document.getElementById("buttonToggle").value="ON";
+        }else{
+            document.getElementById("buttonToggle").value="OFF";
+        }
+    });
+
+    function toggle(button) {
+        if(document.getElementById("buttonToggle").value=="OFF"){
+            socket.emit('button update event', { status: 'OFF' });
+        }
+        else if(document.getElementById("buttonToggle").value=="ON"){
+            socket.emit('button update event', { status: 'ON' });
+        }
+    }
+    </script>
+    <form action="">
+        <input type="button" id="buttonToggle" value="OFF" style="color:blue"
+       onclick="toggle(this);" />
+    </form>
+</body>
+</html>
